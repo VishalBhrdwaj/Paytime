@@ -1,9 +1,9 @@
 const mongoose=require("mongoose");
 
 try {
-mongoose.connect("mongodb+srv://vishalbhardwaj820vb:mongoose23101998@cluster0.ltjmfpq.mongodb.net/") 
+mongoose.connect(`${process.env.MONGODB_URL}`) 
 } catch (error) {
-    console.log(error);
+    console.log("Helloe",error); 
 }
 
 const userSchema=new mongoose.Schema({
@@ -35,15 +35,35 @@ const accountSchema=new mongoose.Schema({
         type:Number,
         required:true
     }
-
+ 
 })
 
-const Account=mongoose.model('Account',accountSchema);
 
+const historySchema=new mongoose.Schema({
+    to:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
+    from:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
+    amount:{
+        type:Number,
+        require:true
+    }
+})
+
+const History=mongoose.model('History',historySchema);
+
+const Account=mongoose.model('Account',accountSchema);
 
 const User=mongoose.model('User',userSchema);
 
 module.exports={
     User,
-    Account
+    Account,
+    History
 }
